@@ -1,0 +1,127 @@
+package com.pruebas.proyect2;
+import java.util.Scanner;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+class Cliente {
+    private String nombre;
+    private int cantidadClientes;
+
+    public Cliente(String nombre, int cantidadClientes) {
+        this.nombre = nombre;
+        this.cantidadClientes = cantidadClientes;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public int getCantidadClientes() {
+        return cantidadClientes;
+    }
+}
+
+class Barco {
+    private String matricula;
+    private double esloraMetros;
+    private int anoFabricacion;
+
+    public Barco(String matricula, double esloraMetros, int anoFabricacion) {
+        this.matricula = matricula;
+        this.esloraMetros = esloraMetros;
+        this.anoFabricacion = anoFabricacion;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public double getEsloraMetros() {
+        return esloraMetros;
+    }
+
+    public int getAnoFabricacion() {
+        return anoFabricacion;
+    }
+}
+
+class Alquiler {
+    private Cliente cliente;
+    private Barco barco;
+    private LocalDate fechaInicial;
+    private LocalDate fechaFinal;
+    private int posicionAmarre;
+
+    public Alquiler(Cliente cliente, Barco barco, LocalDate fechaInicial, LocalDate fechaFinal, int posicionAmarre) {
+        this.cliente = cliente;
+        this.barco = barco;
+        this.fechaInicial = fechaInicial;
+        this.fechaFinal = fechaFinal;
+        this.posicionAmarre = posicionAmarre;
+    }
+
+    public double calcularCostoAlquiler() {
+        long diferenciaDias = java.time.temporal.ChronoUnit.DAYS.between(fechaInicial, fechaFinal);
+        double costoBase = diferenciaDias * 25000;
+        double impuestos = costoBase * 0.1; // 10% de impuestos
+        return costoBase + impuestos;
+    }
+
+    public void imprimirRecibo() {
+        System.out.println("Recibo de Alquiler:");
+        System.out.println("Cliente: " + cliente.getNombre());
+        System.out.println("Cantidad de Clientes: " + cliente.getCantidadClientes());
+        System.out.println("Barco: " + barco.getMatricula());
+        System.out.println("Eslora del Barco: " + barco.getEsloraMetros() + " metros");
+        System.out.println("Año de Fabricación del Barco: " + barco.getAnoFabricacion());
+        System.out.println("Fecha de Inicio del Alquiler: " + fechaInicial.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        System.out.println("Fecha de Fin del Alquiler: " + fechaFinal.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        System.out.println("Posición del Amarre: " + posicionAmarre);
+        System.out.println("Costo del Alquiler: $" + String.format("%.2f", calcularCostoAlquiler()));
+    }
+}
+
+public class Amarres {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Ingrese el nombre del cliente:");
+        String nombreCliente = scanner.nextLine();
+
+        System.out.println("Ingrese la cantidad de clientes:");
+        int cantidadClientes = scanner.nextInt();
+
+        System.out.println("Ingrese la matrícula del barco:");
+        String matriculaBarco = scanner.next();
+
+        System.out.println("Ingrese la eslora del barco en metros:");
+        double esloraBarco = scanner.nextDouble();
+
+        System.out.println("Ingrese el año de fabricación del barco:");
+        int anoFabricacionBarco = scanner.nextInt();
+
+        System.out.println("Ingrese la posición del amarre:");
+        int posicionAmarre = scanner.nextInt();
+
+        System.out.println("Ingrese la fecha de inicio del alquiler (dd MM yyyy):");
+        int dayInicio = scanner.nextInt();
+        int monthInicio = scanner.nextInt();
+        int yearInicio = scanner.nextInt();
+        LocalDate fechaInicial = LocalDate.of(yearInicio, monthInicio, dayInicio);
+
+        System.out.println("Ingrese la fecha de fin del alquiler (dd MM yyyy):");
+        int dayFin = scanner.nextInt();
+        int monthFin = scanner.nextInt();
+        int yearFin = scanner.nextInt();
+        LocalDate fechaFinal = LocalDate.of(yearFin, monthFin, dayFin);
+
+        Cliente cliente = new Cliente(nombreCliente, cantidadClientes);
+        Barco barco = new Barco(matriculaBarco, esloraBarco, anoFabricacionBarco);
+
+        Alquiler alquiler = new Alquiler(cliente, barco, fechaInicial, fechaFinal, posicionAmarre);
+        alquiler.imprimirRecibo();
+
+        scanner.close();
+    }
+}
